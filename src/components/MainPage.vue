@@ -59,7 +59,7 @@
           <v-col class="col=6">
             <v-card-title v-text="item.company" class="company"></v-card-title>
               <v-card-title v-text="item.price" class="price"></v-card-title>
-            <v-btn  class="primary" @click="reserved()">Reserved</v-btn>
+            <v-btn  class="primary" @click="reserved(item._id)">Reserved</v-btn>
           </v-col>
         </v-row>
       </v-container>
@@ -195,8 +195,8 @@
       rating: 3
     }),
     methods: {
-      reserved() {
-        this.$router.push("/Login");
+      reserved(id) {
+        this.$router.push("/reserved/"+id);
       },
     }
   };

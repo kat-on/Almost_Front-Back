@@ -105,7 +105,7 @@ const routes = [
     }
   },
   {
-    path: "/reserved",
+    path: "/reserved/:item",
     name: "reserved",
     component: Reserved,
     meta: {

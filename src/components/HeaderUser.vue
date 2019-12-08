@@ -147,7 +147,8 @@ export default {
         },
         register:function(){
           this.$router.push("/register");
-        }
+        },
+   
       }
 }
 </script>

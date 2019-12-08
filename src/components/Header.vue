@@ -128,8 +128,8 @@ export default {
         this.flexall = 6;
       }
     },
-    Logout(){
-      this.$route.push({path: "/"});
+    logout(){
+      this.$router.push({path: "/"});
     }
   }
 };
