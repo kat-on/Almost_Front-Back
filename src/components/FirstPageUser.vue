@@ -1,20 +1,21 @@
 <template>
   <div>
-    <HeaderUser />
+    <Header id="header"></Header>
     <section class="search-sec">
       <div class="container">
         <form action="#" method="post" novalidate="novalidate">
           <div class="row-one">
             <div class="col-lg-12">
+                      <h2 style="margin-left:530px;">Find the best service we had...</h2>
               <div class="row">
                 <div class="col-lg-3 col-md-3 col-sm-12 p-0">
                   <div class="form-control search-slt">
-                    <v-select v-model="select" :items="items" :rules="[v => !!v || 'Item is required']" label="Choose items" required></v-select>
+                    <v-select v-model="select" :items="transpo" :rules="[v => !!v || 'Item is required']" label="Options" select return-object required></v-select>
                   </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-12 p-0">
                   <div class="form-control search-slt">
-                    <v-text-field type="text" v-model="location" name="input-10-1" label="location" />
+                    <v-text-field type="text" v-model="location"  name="input-10-1" label="location" />
                   </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-12 p-0">
@@ -29,8 +30,8 @@
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-12 p-0">
                   <button type="button" class="btn btn-primary wrn-btn" @click="search()">
-                        <a>search</a>
-                      </button>
+                                  <a>Search</a>
+                                </button>
                 </div>
               </div>
             </div>
@@ -47,13 +48,13 @@
     font-family: Raleway-SemiBold;
   }
   .wrn-btn {
-    font-size: 16px;
+    font-size: 30px;
     width: 200px;
     height: 70px;
     font-family: Raleway-SemiBold;
   }
   .datepicker {
-    font-size: 16px;
+    font-size: 20px;
     font-family: Raleway-SemiBold;
   }
   option {
@@ -95,42 +96,40 @@
   }
 </style>
 <script>
-  import HeaderUser from "../components/HeaderUser.vue";
+  import Header from "../components/Header.vue";
   export default {
     components: {
-      HeaderUser
+      Header
     },
     props: [],
     mounted() {
-      if (localStorage.location) {
-        this.location = localStorage.location;
-      }
-      
-      if (localStorage.date) {
-        this.date = localStorage.date;
-      }
-      if (localStorage.dater) {
-        this.dater = localStorage.dater;
-      }
     },
     data() {
       return {
         valid: true,
-        locationRules: [v => !!v || "Location is required"],
-        select: null,
-        items: ["car", "motorcycle", "van", "bus", "boat"],
-        date: null,
-        dater: null,
-        location: null,
+        // locationRules: [v => !!v || "Location is required"],
+        select: "",
+        transpo: ["car", "motorcycle", "van", "bus", "boat"],
+        date: "",
+        dater: "",
+        location: "",
       };
+    },
+    filters: {
+      capitalize: function(value) {
+        if (!value) return ''
+        value = value.toString()
+        return value.charAt(0).toUpperCase() + value.slice(1)
+      }
+    },
+    computed: {
+      tranpo() {
+        return this.$store.state.options.options;
+      }
     },
     methods: {
       search() {
-        localStorage.items = this.items;
-        localStorage.location = this.location;
-        localStorage.date = this.date;
-        localStorage.dater = this.dater;
-        this.$router.push("/mainpage");
+        this.$router.push(`/mainpage/${this.select}`);
       }
     }
   };
