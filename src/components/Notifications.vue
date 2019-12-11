@@ -23,9 +23,9 @@ export default {
         sortable: false,
         value: "name"
       },
-      { text: "Date Reserved", sortable: false },
-      { text: "Date Return ", sortable: false },
-      { text: "Total ", sortable: false },
+      { text: "Date Reserved",  value: "dateReserved",sortable: false },
+      { text: "Date Return ", value: "dateReturned", sortable: false },
+      { text: "Total ",  value: "totalRate",sortable: false },
       
     ]
   }),
@@ -68,14 +68,14 @@ export default {
     },
     getReserve(){
       this.$axios
-        .get("http://localhost:8080/reservation/get/")
+        .get("http://localhost:8000/reservation/get/")
         .then(response => {
           this.reservations = response.data
         })
     }
   },
   mounted() {
-    this.addVehicle();
+    this.getReserve();
   }
 };
 </script>
