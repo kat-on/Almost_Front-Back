@@ -2,7 +2,7 @@
   <div>
     <Header />
     <v-container fluid>
-      <v-data-table :headers="headers" :items="vehicle"></v-data-table>
+      <v-data-table :headers="headers" :items="reservations"></v-data-table>
     </v-container>
   </div>
 </template>
@@ -14,6 +14,7 @@ export default {
   },
   data: () => ({
     drawer: true,
+    reservations:[],
     vehicle: [],
     headers: [
       {
@@ -64,6 +65,13 @@ export default {
           console.log(error);
         });
       return vehicle;
+    },
+    getReserve(){
+      this.$axios
+        .get("http://localhost:8080/reservation/get/")
+        .then(response => {
+          this.reservations = response.data
+        })
     }
   },
   mounted() {

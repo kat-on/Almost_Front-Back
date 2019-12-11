@@ -10,6 +10,7 @@
           <v-row align="center" class="mx-0">
             <v-col>
               <v-text-field
+              :min="currentDate"
                 :rules="[rules.required]"
                 v-model="dateReserve"
                 :type="'date'"
@@ -20,6 +21,7 @@
             </v-col>
             <v-col>
               <v-text-field
+              :min="currentDate"
                 :rules="[rules.required]"
                 v-model="dateReturn"
                 @change="checkReturnDate(dateReturn)"
@@ -69,6 +71,7 @@ import helper from "../services/helper.js";
 export default {
   data: () => ({
     loading: false,
+    currentDate: new Date().toISOString().substr(0, 10),
     selection: 1,
     vehicle: "",
     item: sessionStorage.getItem("id"),
@@ -112,8 +115,8 @@ export default {
         this.$axios
           .post("http://localhost:5000/reserve", {
             accountId: "0",
-            dateReserved: "this.dateReserve",
-            dateReturned: "this.dateReturn,",
+            dateReserved: dateReserved,
+            dateReturned: dateReturn,
             totalRate: 150
           })
           .then(res => {
