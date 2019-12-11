@@ -81,26 +81,48 @@ export default {
   }),
   mounted() {},
   methods: {
-    reserve() {
-      if (this.$refs.form.validate()) {
-        this.loading = true;
-        setTimeout(() => (this.loading = false), 2000);
+    // reserve() {
+    //   if (this.$refs.form.validate()) {
+    //     this.loading = true;
+    //     setTimeout(() => (this.loading = false), 2000);
+        
+    //     this.$axios
+    //       .post("/reserve", {
+    //         accountId: user._id,
+    //         dateReserved: this.dateReserve,
+    //         dateReturned: this.dateReturn,
+    //         totalRate: this.payable
+    //       })
+    //       .then(res => {
+    //         // 
+    //         this.$router.push("/mainpage");
+    //       })
+    //       .catch(err => {
+    //         // 
+    //       });
+    //   }
+    // },
+
+    //testing
+        reserve() {
+      // if (this.$refs.form.validate()) {
+      //   this.loading = true;
+      //   setTimeout(() => (this.loading = false), 2000);
         
         this.$axios
-          .post("", {
-            accountId: user._id,
-            dateReserved: this.dateReserve,
-            dateReturned: this.dateReturn,
-            totalRate: this.payable
+          .post("http://localhost:5000/reserve", {
+            accountId: "0",
+            dateReserved: "this.dateReserve",
+            dateReturned: "this.dateReturn,",
+            totalRate: 150
           })
           .then(res => {
-            // 
             this.$router.push("/mainpage");
           })
           .catch(err => {
             // 
           });
-      }
+      // }
     },
     checkReservedDate(value) {
       var date = new Date();
