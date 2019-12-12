@@ -10,7 +10,7 @@
           <v-row align="center" class="mx-0">
             <v-col>
               <v-text-field
-              :min="currentDate"
+                :min="currentDate"
                 :rules="[rules.required]"
                 v-model="dateReserve"
                 :type="'date'"
@@ -21,10 +21,10 @@
             </v-col>
             <v-col>
               <v-text-field
-              :min="currentDate"
+                :min="currentDate"
                 :rules="[rules.required]"
                 v-model="dateReturn"
-                @change="checkReturnDate(dateReturn)"
+                @input.native="updatepay"
                 :type="'date'"
                 :disabled="!dateReserve"
                 :prepend-icon="'mdi-calendar'"
@@ -32,30 +32,8 @@
                 label="date returned"
               ></v-text-field>
             </v-col>
-
-            <!-- <v-row align="center" class="mx-0"> -->
-            <!-- <v-text-field
-              :rules="[rules.required]"
-              v-model="vehicle"
-              :type="'text' "
-              :prepend-icon="'mdi-map-marker'"
-              name="input-10-1"
-              label="username"
-            ></v-text-field>-->
           </v-row>
-          <v-row align="center" class="mx-1">
-            <!-- <v-row align="center" class="mx-0"> -->
-
-            <!-- <v-text-field
-              :rules="[rules.required]"
-              v-model="payable"
-              type="number"
-              readonly
-              :prepend-icon="'mdi-item'"
-              name="input-10-1"
-              label="total payable"
-            ></v-text-field>-->
-          </v-row>
+          <v-row align="center" class="mx-1"></v-row>
         </v-form>
         <p class="display-3 text-center">&#8369;{{payable}}</p>
       </v-card-text>
@@ -84,48 +62,25 @@ export default {
   }),
   mounted() {},
   methods: {
-    // reserve() {
-    //   if (this.$refs.form.validate()) {
-    //     this.loading = true;
-    //     setTimeout(() => (this.loading = false), 2000);
-        
-    //     this.$axios
-    //       .post("/reserve", {
-    //         accountId: user._id,
-    //         dateReserved: this.dateReserve,
-    //         dateReturned: this.dateReturn,
-    //         totalRate: this.payable
-    //       })
-    //       .then(res => {
-    //         // 
-    //         this.$router.push("/mainpage");
-    //       })
-    //       .catch(err => {
-    //         // 
-    //       });
-    //   }
-    // },
-
-    //testing
-        reserve() {
-      // if (this.$refs.form.validate()) {
-      //   this.loading = true;
-      //   setTimeout(() => (this.loading = false), 2000);
-        
+    reserve() {
+      if (this.$refs.form.validate()) {
+        this.loading = true;
+        setTimeout(() => (this.loading = false), 2000);
         this.$axios
           .post("http://localhost:5000/reserve", {
-            accountId: "0",
-            dateReserved: dateReserved,
-            dateReturned: dateReturn,
-            totalRate: 150
+            name: localStorage.getItem("username"),
+            dateReserved: this.dateReserve,
+            dateReturned: this.dateReturn,
+            totalRate: this.payable
           })
           .then(res => {
+            //
             this.$router.push("/mainpage");
           })
           .catch(err => {
-            // 
+            //
           });
-      // }
+      }
     },
     checkReservedDate(value) {
       var date = new Date();
@@ -151,7 +106,14 @@ export default {
         this.dateReserve = null;
       }
     },
+    updatepay() {
+      var diffDays =
+        new Date(this.dateReturn).getDate() -
+        new Date(this.dateReserve).getDate();
+      this.payable = diffDays * 1000;
+    },
     checkReturnDate(value) {
+      console.log("onchage");
       var reserveDate = this.dateReserve.split("-");
       var reserved = {
         date: Number(reserveDate[2]),
@@ -164,30 +126,14 @@ export default {
         year: Number(returnDate[0]),
         month: Number(returnDate[1])
       };
-      if (
-        reserved.month <= returned.month &&
-        reserved.year <= returned.year &&
-        reserved.date <= returned.date
-      ) {
-        // this.payable = 1000;
-        this.$axios
-          .post("http://localhost:5000/calculate", { id: this.item })
-          .then(res => {
-            var ratings = res.data;
-            // calculate
-            // this.payable = calculated;
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      } else {
-        alert("errorx");
-        this.dateReturn = null;
-      }
+      var diffDays =
+        new Date(this.dateReturn).getDate() -
+        new Date(this.dateReserve).getDate();
+      console.log("fbgasdf ", diffDays);
+      this.payable = diffDays * 1000;
     }
   },
   mounted() {
-    // if not logged in  direct to login
     sessionStorage.setItem("item_id", this.$route.params.item);
   }
 };
@@ -195,11 +141,9 @@ export default {
 <style scoped>
 .v-card:not(.v-sheet--tile):not(.v-card--shaped) {
   border-radius: 4px;
-  /* -webkit-text-stroke-width: thick; */
   max-width: 500px;
 }
 .theme--light.v-subheader {
-  /* color: rgba(0, 0, 0, 0.54); */
   background-color: #1976d2;
   height: 100px;
 }

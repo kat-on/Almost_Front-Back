@@ -51,7 +51,12 @@ export default {
       login(){
         helper.login(this.username, this.password).then(resp=>{
           if(resp.data.status){
-            this.$router.push('/reserved');
+            if(resp.data.data.isAdmin){
+              this.$router.push('/notifications');
+            }else{
+              localStorage.setItem("username", resp.data.data.username)
+            this.$router.push('/mainpage');
+            }
           }else{
             alert(resp.data.sms)
           }

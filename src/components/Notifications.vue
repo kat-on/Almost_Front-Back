@@ -8,12 +8,15 @@
 </template>
 <script>
 import Header from "..//components/Header.vue";
+import io from "socket.io-client";
+var socket = io.connect("http://localhost:5000");
 export default {
   components: {
     Header
   },
   data: () => ({
     drawer: true,
+    test: "",
     reservations:[],
     vehicle: [],
     headers: [
@@ -29,7 +32,18 @@ export default {
       
     ]
   }),
+  created(){
+    this.onReserveEvent()
+  },
   methods: {
+    onReserveEvent(){
+      socket.on('reserveEvent', (data)=>{
+        this.manageReserve(data)
+      })
+    },
+    manageReserve(data){
+      this.reservations = data
+    },
     dashboard() {
       this.$router.push("/");
     },
@@ -43,7 +57,7 @@ export default {
       var vehicle = [];
       var addVehicle = "Vehicle";
       this.axios
-        .post("http://localhost:8000/retrieveVehicle/" + event)
+        .post("http://localhost:5000/retrieveVehicle/" + event)
         .then(response => {
           console.log(response);
           var dataT = response.data;
@@ -68,8 +82,9 @@ export default {
     },
     getReserve(){
       this.$axios
-        .get("http://localhost:8000/reservation/get/")
+        .get("http://localhost:5000/reservation/get/")
         .then(response => {
+          console.log(response)
           this.reservations = response.data
         })
     }
